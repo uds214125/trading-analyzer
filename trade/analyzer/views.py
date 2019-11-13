@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from .serializers import AnalyzerSerializer
 from .models import Analyzer
 
-from django.db.models import F,Avg,Sum
+from django.db.models import F, Avg, Sum
 
 class AnalyzerList(APIView):
     """
@@ -25,15 +25,36 @@ class AnalyzerList(APIView):
 
         if request.method == 'GET':
             queryset = Analyzer.objects.all()
-            Date1 = request.GET.get('start', None)
-            Date2 = request.GET.get('end', None)
-            # print("=========Date2 ===", type(Date2))
-            if Date1 is not None and Date2 is not None:
+            start = request.GET.get('start', None)
+            end = request.GET.get('end', None)
+            avg = request.GET.get('avg', None)
+            change = request.GET.get('change', None)
+            print("=========Date2 ===", avg == '1')
+            if start is not None and end is not None and avg == '0' and change == '0':
 
                 queryset = queryset.filter(Open__gt=F('Close')).filter(Date__gte=Date1, Date__lte=Date2)
                 print("range and > queryset==========: ",str(queryset.query))
                 serializer_class = AnalyzerSerializer(queryset,many=True)
                 return Response(serializer_class.data)
+
+            elif start is not None and end is not None and avg == '1' and change == '0':
+                queryset1 = Analyzer.objects.values(
+                    'Turnover'
+                ).filter(Date__gte=start, Date__lte=end).aggregate(
+                    avg_turnover=Avg('Turnover')
+                )
+                print("average queryset1==========: ", queryset1)
+                return Response(queryset1)
+            elif start is not None and end is not None and avg == '0' and change == '1':
+                    queryset2 = Analyzer.objects.values(
+                                'High','Low'
+                                ).filter(
+                                    Date__gte=start, Date__lte=end
+                                ).aggregate(
+                                    avg_change=Avg('High')- Avg('Low')
+                                )
+                    print("average change diff queryset2==========: ", queryset2)
+                    return Response(queryset2)
             else:
                 print("Get all record==========:")
                 queryset = Analyzer.objects.all()
