@@ -13,14 +13,32 @@ from rest_framework.views import APIView
 from .serializers import AnalyzerSerializer
 from .models import Analyzer
 
-from django.db.models import F,Avg
+from django.db.models import F,Avg,Sum
 
 class AnalyzerList(APIView):
     """
         Get API endpoint which allows get all records, get by filter ( or query)
     """
-    queryset = User.objects.all()
-    serialize_class = AnalyzerSerializer
+    # queryset = User.objects.all()
+    # serialize_class = AnalyzerSerializer
+    def get(self, request):
+
+        if request.method == 'GET':
+            queryset = Analyzer.objects.all()
+            Date1 = request.GET.get('start', None)
+            Date2 = request.GET.get('end', None)
+            # print("=========Date2 ===", type(Date2))
+            if Date1 is not None and Date2 is not None:
+
+                queryset = queryset.filter(Open__gt=F('Close')).filter(Date__gte=Date1, Date__lte=Date2)
+                print("range and > queryset==========: ",str(queryset.query))
+                serializer_class = AnalyzerSerializer(queryset,many=True)
+                return Response(serializer_class.data)
+            else:
+                print("Get all record==========:")
+                queryset = Analyzer.objects.all()
+                serializer_class = AnalyzerSerializer(queryset,many=True)
+                return Response(serializer_class.data)
 
     def post(self,request):
         if request.method == 'POST':
