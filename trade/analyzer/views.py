@@ -13,7 +13,8 @@ from rest_framework.views import APIView
 from .serializers import AnalyzerSerializer
 from .models import Analyzer
 
-from django.db.models import F, Avg, Sum
+from django.db.models import F, Avg, Sum, Count, Max, Min
+from django.db.models.query import QuerySet
 
 class AnalyzerList(APIView):
     """
