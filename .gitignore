@@ -18,3 +18,7 @@ vqmod/logs/*
 vqmod/vqcache/*
 vqmod/checked.cache
 vqmod/mods.cache
+
+analyzer/__pycache__
+analyzer/migration/__pycache__
+trade/__pycache__

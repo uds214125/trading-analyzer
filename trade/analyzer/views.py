@@ -15,6 +15,7 @@ from .models import Analyzer
 
 from django.db.models import F, Avg, Sum, Count, Max, Min
 from django.db.models.query import QuerySet
+import datetime
 
 class AnalyzerList(APIView):
     """
@@ -22,15 +23,22 @@ class AnalyzerList(APIView):
     """
     # queryset = User.objects.all()
     # serialize_class = AnalyzerSerializer
+    # def dispatch(self, *args, **kwargs):
+    #     '''
+    #         common code here
+    #     '''
+    #     return super(self).dispatch(*args, **kwargs)
+
     def get(self, request):
 
         if request.method == 'GET':
-            queryset = Analyzer.objects.all()
-            start = request.GET.get('start', None)
-            end = request.GET.get('end', None)
-            avg = request.GET.get('avg', None)
-            change = request.GET.get('change', None)
-            print("=========Date2 ===", avg == '1')
+            queryset    = Analyzer.objects.all()
+            start       = request.GET.get('start', None)
+            end         = request.GET.get('end', None)
+            avg         = request.GET.get('avg', None)
+            change      = request.GET.get('change', None)
+            daywise     = request.GET.get('daywise', None)
+            print("=========Trading ========")
             if start is not None and end is not None and avg == '0' and change == '0':
 
                 queryset = queryset.filter(Open__gt=F('Close')).filter(Date__gte=Date1, Date__lte=Date2)
@@ -56,6 +64,16 @@ class AnalyzerList(APIView):
                                 )
                     print("average change diff queryset2==========: ", queryset2)
                     return Response(queryset2)
+            elif daywise == '1':
+                metrics = {
+                    'avg_turnover': Avg('Turnover'),
+                    'maximum_turnover': Max('Turnover'),
+                    'minimum_turnover': Min('Turnover'),
+                }
+                queryset = Analyzer.objects.values(
+                    'Date'
+                ).annotate(**metrics)[:10]
+                return Response(queryset)
             else:
                 print("Get all record==========:")
                 queryset = Analyzer.objects.all()
