@@ -37,7 +37,8 @@ class AnalyzerList(APIView):
             end         = request.GET.get('end', None)
             avg         = request.GET.get('avg', None)
             change      = request.GET.get('change', None)
-            daywise     = request.GET.get('daywise', None)
+            datewise    = request.GET.get('datewise', None)
+            limit       = request.GET.get('limit', None)
             print("=========Trading ========")
             if start is not None and end is not None and avg == '0' and change == '0':
 
@@ -64,7 +65,10 @@ class AnalyzerList(APIView):
                                 )
                     print("average change diff queryset2==========: ", queryset2)
                     return Response(queryset2)
-            elif daywise == '1':
+            elif datewise == '1':
+                print("type ", type(limit))
+                maxData = int(limit) if int(limit) is not None  else 20;
+                print(" Max Data To be limit ",maxData)
                 metrics = {
                     'avg_turnover': Avg('Turnover'),
                     'maximum_turnover': Max('Turnover'),
@@ -72,7 +76,7 @@ class AnalyzerList(APIView):
                 }
                 queryset = Analyzer.objects.values(
                     'Date'
-                ).annotate(**metrics)[:10]
+                ).annotate(**metrics)[:maxData]
                 return Response(queryset)
             else:
                 print("Get all record==========:")
