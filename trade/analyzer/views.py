@@ -28,7 +28,11 @@ class AnalyzerList(APIView):
     #         common code here
     #     '''
     #     return super(self).dispatch(*args, **kwargs)
-
+    """
+       description : 
+       since : 
+       author:
+    """
     def get(self, request):
 
         if request.method == 'GET':
@@ -66,7 +70,6 @@ class AnalyzerList(APIView):
                     print("average change diff queryset2==========: ", queryset2)
                     return Response(queryset2)
             elif datewise == '1':
-                print("type ", type(limit))
                 maxData = int(limit) if int(limit) is not None  else 20;
                 print(" Max Data To be limit ",maxData)
                 metrics = {
@@ -83,7 +86,11 @@ class AnalyzerList(APIView):
                 queryset = Analyzer.objects.all()
                 serializer_class = AnalyzerSerializer(queryset,many=True)
                 return Response(serializer_class.data)
-
+    """
+       description : 
+       since : 
+       author:
+    """
     def post(self,request):
         if request.method == 'POST':
             serializer = AnalyzerSerializer(data=request.data)

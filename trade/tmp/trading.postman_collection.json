@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "d75bb139-b014-4c6d-a3a0-62d0bf9ad4de",
+		"name": "trading",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Return all records",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}{{BASE_URL}}",
+					"host": [
+						"{{HOST}}{{BASE_URL}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-11&end=2018-10-12",
+					"host": [
+						"{{HOST}}{{BASE_URL}}"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2018-10-11"
+						},
+						{
+							"key": "end",
+							"value": "2018-10-12"
+						}
+					]
+				},
+				"description": "Get all records where the opening price is greater than closing price between any 2 dates"
+			},
+			"response": []
+		},
+		{
+			"name": "Get avg turnover",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-11&end=2018-10-12&avg=1&change=0",
+					"host": [
+						"{{HOST}}{{BASE_URL}}"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2018-10-11"
+						},
+						{
+							"key": "end",
+							"value": "2018-10-12"
+						},
+						{
+							"key": "avg",
+							"value": "1"
+						},
+						{
+							"key": "change",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get avg change btw High and Low",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-01&end=2018-10-09&avg=0&change=1",
+					"host": [
+						"{{HOST}}{{BASE_URL}}"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2018-10-01"
+						},
+						{
+							"key": "end",
+							"value": "2018-10-09"
+						},
+						{
+							"key": "avg",
+							"value": "0"
+						},
+						{
+							"key": "change",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Average change difference between high and low (high - low) between any 2 dates"
+			},
+			"response": []
+		},
+		{
+			"name": "Datewise Avg",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{HOST}}{{BASE_URL}}?daywise=1",
+					"host": [
+						"{{HOST}}{{BASE_URL}}"
+					],
+					"query": [
+						{
+							"key": "daywise",
+							"value": "1"
+						}
+					]
+				},
+				"description": "Daywise avg, max and min"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
