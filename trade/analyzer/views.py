@@ -46,7 +46,7 @@ class AnalyzerList(APIView):
             print("=========Trading ========")
             if start is not None and end is not None and avg == '0' and change == '0':
 
-                queryset = queryset.filter(Open__gt=F('Close')).filter(Date__gte=Date1, Date__lte=Date2)
+                queryset = queryset.filter(Open__gt=F('Close')).filter(Date__gte=start, Date__lte=end)
                 print("range and > queryset==========: ",str(queryset.query))
                 serializer_class = AnalyzerSerializer(queryset,many=True)
                 return Response(serializer_class.data)
@@ -60,15 +60,8 @@ class AnalyzerList(APIView):
                 print("average queryset1==========: ", queryset1)
                 return Response(queryset1)
             elif start is not None and end is not None and avg == '0' and change == '1':
-                    queryset2 = Analyzer.objects.values(
-                                'High','Low'
-                                ).filter(
-                                    Date__gte=start, Date__lte=end
-                                ).aggregate(
-                                    avg_change=Avg('High')- Avg('Low')
-                                )
-                    print("average change diff queryset2==========: ", queryset2)
-                    return Response(queryset2)
+                # TODO: 
+                    return Response({'avg_change':''})
             elif datewise == '1':
                 maxData = int(limit) if int(limit) is not None  else 20;
                 print(" Max Data To be limit ",maxData)
