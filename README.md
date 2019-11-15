@@ -13,8 +13,10 @@ A small trading analyzer dashboard using django , postgres database and angular
             > pip install virtualenvwrapper-win
             > mkvirtualenv env_name
         `
-    2 Install dependencies (pip install -r requirements.txt)
-    3 Run the project
+    2 Active virtual env
+        > workon env_name
+    3 Install dependencies (pip install -r requirements.txt)
+    4 Run the project
       > python manage.py runserver
 
 ### Model Migration

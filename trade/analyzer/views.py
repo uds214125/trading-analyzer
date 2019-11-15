@@ -13,9 +13,12 @@ from rest_framework.views import APIView
 from .serializers import AnalyzerSerializer
 from .models import Analyzer
 
-from django.db.models import F, Avg, Sum, Count, Max, Min
+from django.db.models import F, Avg, Sum, Count, Max, Min, Func
 from django.db.models.query import QuerySet
 import datetime
+# An F() object represents the value of a model field.
+# A Q() object, like an F object, encapsulates a SQL expression in a Python object that can be used in database-related operations.
+from django.db import models
 
 class AnalyzerList(APIView):
     """
@@ -41,6 +44,7 @@ class AnalyzerList(APIView):
             end         = request.GET.get('end', None)
             avg         = request.GET.get('avg', None)
             change      = request.GET.get('change', None)
+            monthwise   = request.GET.get('monthwise', None)
             datewise    = request.GET.get('datewise', None)
             limit       = request.GET.get('limit', None)
             print("=========Trading ========")
@@ -61,7 +65,27 @@ class AnalyzerList(APIView):
                 return Response(queryset1)
             elif start is not None and end is not None and avg == '0' and change == '1':
                 # TODO: 
-                    return Response({'avg_change':''})
+                queryset2 = Analyzer.objects.values(
+                                'High','Low'
+                                ).filter(
+                                    Date__gte=start, Date__lte=end
+                                ).aggregate(
+                                    avg_change=Avg('High') - Avg('Low')
+                                )
+                print("average change diff queryset2==========: ", queryset2)
+                return Response(queryset2)
+                # return Response({'avg_change':''})
+            elif monthwise == '1':
+                    kwargs = {
+                        'open_avg' : Avg('Open'),
+                        'close_avg': Avg('Close')
+                    }
+                    queryset = (Analyzer.objects
+                                .annotate(month=Month('Date'))
+                                .values('month')
+                                .annotate(**kwargs)
+                                .order_by())
+                    return Response(queryset)
             elif datewise == '1':
                 maxData = int(limit) if int(limit) is not None  else 20;
                 print(" Max Data To be limit ",maxData)
@@ -93,3 +117,8 @@ class AnalyzerList(APIView):
             else:
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         return Response(status=status.HTTP_200_OK)
+
+class Month(Func):
+    function = 'EXTRACT'
+    template = '%(function)s(MONTH from %(expressions)s)'
+    output_field = models.IntegerField()

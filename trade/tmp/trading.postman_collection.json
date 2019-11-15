@@ -25,18 +25,26 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-11&end=2018-10-12",
+					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-01&end=2018-10-12&avg=0&change=0",
 					"host": [
 						"{{HOST}}{{BASE_URL}}"
 					],
 					"query": [
 						{
 							"key": "start",
-							"value": "2018-10-11"
+							"value": "2018-10-01"
 						},
 						{
 							"key": "end",
 							"value": "2018-10-12"
+						},
+						{
+							"key": "avg",
+							"value": "0"
+						},
+						{
+							"key": "change",
+							"value": "0"
 						}
 					]
 				},
@@ -50,14 +58,14 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-11&end=2018-10-12&avg=1&change=0",
+					"raw": "{{HOST}}{{BASE_URL}}?start=2018-10-01&end=2018-10-12&avg=1&change=0",
 					"host": [
 						"{{HOST}}{{BASE_URL}}"
 					],
 					"query": [
 						{
 							"key": "start",
-							"value": "2018-10-11"
+							"value": "2018-10-01"
 						},
 						{
 							"key": "end",
@@ -115,14 +123,18 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{HOST}}{{BASE_URL}}?daywise=1",
+					"raw": "{{HOST}}{{BASE_URL}}?datewise=1&limit=5",
 					"host": [
 						"{{HOST}}{{BASE_URL}}"
 					],
 					"query": [
 						{
-							"key": "daywise",
+							"key": "datewise",
 							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
 						}
 					]
 				},
